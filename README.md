@@ -99,28 +99,33 @@ Cookie 横幅在访客点 Accept 之前**不加载**广告脚本（GDPR 硬要�
 
 1. `astro.config.mjs` → `site` 改成你的真实域名，如 `https://blog.你的域名.com`（**自定义域名不设 `base`**）
 2. `public/robots.txt` → sitemap 地址改成同一域名
-3. `public/admin/config.yml` → `backend.repo` 已设为 `2020-er-qw/ai-field-notes`（如换仓库名需同步改这里）
+3. `public/admin/config.yml` → `backend.repo` 已设为 `2020-er-qw/2020-er-qw.github.io`（如换仓库名需同步改这里）
 
-### 第 2 步：建 public/CNAME 文件（自定义域名必须）
+### 第 2 步：建 public/CNAME 文件（仅自定义域名需要）
 
-在 `public/` 下新建无扩展名文件 `CNAME`，内容就一行你的域名：
+**现在用免费地址 `https://2020-er-qw.github.io` 上线，跳过此步。**
+
+将来买了自定义域名后，在 `public/` 下新建无扩展名文件 `CNAME`，内容就一行你的域名：
 
 ```
 blog.你的域名.com
 ```
 
-> 这个文件会被原样复制到 `dist/CNAME`，GitHub Pages 靠它识别自定义域名。走 `用户名.github.io` 则可跳过此步，但要在 astro.config 里设 `base: '/仓库名'`。
+同时把 `astro.config.mjs` 的 `site` 改成 `https://blog.你的域名.com`。这个文件会被原样复制到 `dist/CNAME`，GitHub Pages 靠它识别自定义域名。
 
 ### 第 3 步：项目推到 GitHub
 
+在 GitHub 新建一个仓库，**名字必须 exactly 是 `2020-er-qw.github.io`**（用户名 + `.github.io`，这是"用户站点仓库"，免费地址就是根域名 `https://2020-er-qw.github.io`）。创建时不要勾 README / .gitignore / license，保持空仓库。
+
+然后在本项目目录执行（本地 git 仓库已经初始化并提交了，只需连远程 + 推送）：
+
 ```bash
-git init
-git add .
-git commit -m "Initial commit"
-git remote add origin https://github.com/2020-er-qw/ai-field-notes.git
-git branch -M main
+git remote add origin https://github.com/2020-er-qw/2020-er-qw.github.io.git
 git push -u origin main
 ```
+
+> 推送时会弹出 GitHub 登录窗口，浏览器登录一次即可（本机已装 git 2.55，会走凭证管理器）。
+> 如果之前已经跑过 `git init` / `git commit`，这里就只需上面两条命令。
 
 ### 第 4 步：开启 GitHub Pages + Actions
 
@@ -174,7 +179,7 @@ git push -u origin main
 - [ ] `astro.config.mjs` 的 `site` 改成真实域名（自定义域名不设 base）
 - [ ] `public/CNAME` 内容 = 你的域名（自定义域名时）
 - [ ] `public/robots.txt` 的 sitemap 地址改成真实域名
-- [ ] `public/admin/config.yml` 的 `backend.repo` = `2020-er-qw/ai-field-notes`（已填，换仓库需改）
+- [ ] `public/admin/config.yml` 的 `backend.repo` = `2020-er-qw/2020-er-qw.github.io`（已填，换仓库需改）
 - [ ] 隐私政策页的联系方式换成真实邮箱
 - [ ] GitHub 仓库 Settings → Pages → Source 选了 GitHub Actions
 - [ ] Actions 工作流 `Deploy to GitHub Pages` 跑绿

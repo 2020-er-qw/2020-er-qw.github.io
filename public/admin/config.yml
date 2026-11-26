@@ -6,7 +6,7 @@
 # ============================================================
 backend:
   name: github
-  repo: 2020-er-qw/ai-field-notes   # 专用仓库；域名待用户提供后再补 astro.config.mjs 的 site
+  repo: 2020-er-qw/2020-er-qw.github.io   # 用户站点仓库：免费地址 https://2020-er-qw.github.io
   branch: main
   # 注意：不配置 auth_endpoint / base_url，Sveltia 会显示"令牌登录"按钮
   # 提交信息模板，方便在 Git 历史里看到是谁发的

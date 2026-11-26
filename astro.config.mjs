@@ -2,8 +2,9 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  // 上线前改成你的真实域名，sitemap 和 canonical 都靠它
-  site: 'https://your-domain.pages.dev',
+  // 用用户站点仓库（2020-er-qw.github.io）：免费地址即根域名，无需 base。
+  // 将来换自定义域名：site 改成 'https://你的域名' 并建 public/CNAME 写域名即可。
+  site: 'https://2020-er-qw.github.io',
   integrations: [
     sitemap({
       // filter 收到完整 URL：排除 404 页和根跳转页（pathname 为 /）
