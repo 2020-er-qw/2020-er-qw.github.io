@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { ui } from '../i18n/ui';
+const t = ui.en;
+---
+
+<BaseLayout title={t.siteName} description={t.homeDesc} lang="en">
+  <div class="lang-gate">
+    <h1 class="page-title">{t.siteName}</h1>
+    <p class="page-sub">{t.gateChoosing}</p>
+    <div class="lang-choices">
+      <a class="lang-choice" href="/en/">
+        <span class="lang-choice-title">{t.gateEnglish}</span>
+        <span class="lang-choice-sub">{t.gateEnglishSub}</span>
+      </a>
+      <a class="lang-choice" href="/zh/">
+        <span class="lang-choice-title">{t.gateChinese}</span>
+        <span class="lang-choice-sub">{t.gateChineseSub}</span>
+      </a>
+    </div>
+    <noscript>
+      <p class="page-sub" style="margin-top:24px">{ui.zh.gateNoJs} / {t.gateNoJs}</p>
+    </noscript>
+  </div>
+</BaseLayout>
+
+<script is:inline>
+  (function () {
+    var lang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+    var target = lang.indexOf('zh') === 0 ? '/zh/' : '/en/';
+    var choice = null;
+    try { choice = localStorage.getItem('site-lang'); } catch (e) {}
+    if (choice === 'en' || choice === 'zh') target = '/' + choice + '/';
+    location.replace(target);
+  })();
+</script>

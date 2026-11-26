@@ -1,0 +1,65 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getText, isLang } from '../../i18n/helpers';
+import type { Lang } from '../../i18n/ui';
+
+export function getStaticPaths() {
+  return [{ params: { lang: 'en' } }, { params: { lang: 'zh' } }];
+}
+const { lang } = Astro.params;
+if (!isLang(lang)) return Astro.redirect('/');
+const L = lang as Lang;
+const t = getText(L);
+const feedUrl = new URL('/rss.xml', Astro.site).href;
+---
+
+<BaseLayout title={t.subscribeTitle} description={t.subscribeDesc} lang={L}>
+  <div class="reading">
+    <h1 class="page-title">{t.subscribeH1}</h1>
+    <p class="page-sub">{t.subscribeIntro}</p>
+
+    <div class="subscribe-box">
+      <label class="subscribe-label">{t.subscribeFeedLabel}</label>
+      <div class="subscribe-row">
+        <input class="subscribe-url" id="feed-url" value={feedUrl} readonly aria-label={t.subscribeFeedLabel} />
+        <button class="btn btn-primary" id="copy-feed" type="button" data-copied={t.subscribeCopied} data-copy={t.subscribeCopy}>{t.subscribeCopy}</button>
+      </div>
+      <p class="subscribe-note">{t.subscribeNote}</p>
+      <p class="subscribe-open"><a href="/rss.xml">{t.subscribeOpen} →</a></p>
+    </div>
+
+    <div class="subscribe-how">
+      <h2>{t.subscribeHowTitle}</h2>
+      <ol>
+        <li>{t.subscribeStep1}</li>
+        <li>{t.subscribeStep2}</li>
+        <li>{t.subscribeStep3}</li>
+      </ol>
+    </div>
+
+    <p class="subscribe-back"><a href={`/${L}/`}>{t.subscribeBack}</a></p>
+  </div>
+</BaseLayout>
+
+<script is:inline>
+  (function () {
+    var btn = document.getElementById('copy-feed');
+    var input = document.getElementById('feed-url');
+    if (!btn || !input) return;
+    btn.addEventListener('click', function () {
+      var original = btn.getAttribute('data-copy');
+      var copied = btn.getAttribute('data-copied');
+      function flash() {
+        btn.textContent = copied;
+        setTimeout(function () { btn.textContent = original; }, 1800);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(input.value).then(flash).catch(function () {
+          input.select(); document.execCommand('copy'); flash();
+        });
+      } else {
+        input.select(); document.execCommand('copy'); flash();
+      }
+    });
+  })();
+</script>

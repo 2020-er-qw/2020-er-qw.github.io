@@ -1,0 +1,33 @@
+---
+import { getText, type Lang } from '../i18n/helpers';
+
+interface Props { lang: Lang; switchHref?: string; }
+const { lang, switchHref } = Astro.props;
+const t = getText(lang);
+const path = Astro.url.pathname;
+const homeHref = `/${lang}/`;
+const otherLang = lang === 'zh' ? 'en' : 'zh';
+// 显示目标语言：中文页显示 EN（点它去英文），英文页显示 中（点它去中文）
+const switchLabel = otherLang === 'zh' ? '中' : 'EN';
+const switchTitle = otherLang === 'en' ? 'Switch to English' : '切换到中文';
+---
+<header class="site-header">
+  <div class="wrap">
+    <a href={homeHref} class="brand">AI Field <span>Notes</span></a>
+    <nav class="site-nav" aria-label="Main">
+      <a href={homeHref} aria-current={path === homeHref ? 'page' : undefined}>{t.navBlog}</a>
+      <a href={`/${lang}/about/`} aria-current={path.includes('/about') ? 'page' : undefined}>{t.navAbout}</a>
+      {switchHref && (
+        <a class="lang-toggle" href={switchHref} data-lang-switch={otherLang} hreflang={otherLang} aria-label={switchTitle} title={switchTitle}>{switchLabel}</a>
+      )}
+    </nav>
+  </div>
+</header>
+
+<script is:inline>
+  document.querySelectorAll('[data-lang-switch]').forEach(function (el) {
+    el.addEventListener('click', function () {
+      try { localStorage.setItem('site-lang', el.getAttribute('data-lang-switch')); } catch (e) {}
+    });
+  });
+</script>

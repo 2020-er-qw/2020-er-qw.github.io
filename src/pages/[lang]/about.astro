@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getText, isLang } from '../../i18n/helpers';
+import type { Lang } from '../../i18n/ui';
+
+export function getStaticPaths() {
+  return [{ params: { lang: 'en' } }, { params: { lang: 'zh' } }];
+}
+const { lang } = Astro.params;
+if (!isLang(lang)) return Astro.redirect('/');
+const L = lang as Lang;
+const t = getText(L);
+---
+
+<BaseLayout title={t.aboutTitle} description={t.aboutDesc} lang={L}>
+  <div class="reading">
+  <h1 class="page-title">{t.aboutTitle}</h1>
+  <div class="legal">
+    <p>{t.aboutP1}</p>
+    <p>{t.aboutP2}</p>
+    <p>{t.aboutP3}</p>
+    <p><a href={`/${L}/`}>{t.backToBlog}</a></p>
+  </div>
+  </div>
+</BaseLayout>

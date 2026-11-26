@@ -1,0 +1,41 @@
+name: Deploy to GitHub Pages
+
+on:
+  # 每次推送到 main 分支自动部署（CMS 保存文章 = 一次 push）
+  push:
+    branches: [main]
+  # 允许在 Actions 页面手动触发
+  workflow_dispatch:
+
+# 允许 job 克隆仓库并部署到 GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 同一时间只允许一个部署，排队执行
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      - name: Install, build, and upload site
+        uses: withastro/action@v5
+        # withastro/action 会自动 npm install + npm run build + 上传产物
+        # 自定义域名：astro.config.mjs 里只设 site，不设 base
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

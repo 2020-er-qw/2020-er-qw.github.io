@@ -1,0 +1,78 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getText, type Lang } from '../i18n/helpers';
+
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const t = getText(lang);
+const isZh = lang === 'zh';
+
+const allPosts = (await getCollection('blog', ({ data }) => !data.draft && (data.lang || 'en') === lang))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const pinned = allPosts.find((p) => p.data.pinned);
+const posts = allPosts.filter((p) => p.id !== pinned?.id);
+const allTags = [...new Set(allPosts.flatMap((p) => p.data.tags))];
+const fmt = (d) => d.toLocaleDateString(isZh ? 'zh-CN' : 'en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+---
+
+<BaseLayout title={t.homeTitle} description={t.homeDesc} lang={lang}>
+  <div class="page-hero">
+    <h1 class="page-title">{t.homeH1}</h1>
+    <p class="page-sub">{t.homeSub}</p>
+  </div>
+
+  <div class="layout-two-col">
+    <main class="col-main">
+      {pinned && (
+        <a href={`/posts/${pinned.id}/`} class="pinned-card">
+          {pinned.data.cover && <img class="pinned-cover" src={pinned.data.cover} alt="" loading="eager" />}
+          <div class="pinned-body">
+            <span class="pinned-badge">📌 {t.pinnedLabel}</span>
+            <h2>{pinned.data.title}</h2>
+            <p class="post-excerpt">{pinned.data.description}</p>
+            <div class="post-meta">{fmt(pinned.data.pubDate)}</div>
+          </div>
+        </a>
+      )}
+
+      {posts.length > 0 && <h2 class="section-label">{t.latestLabel}</h2>}
+      {posts.length ? (
+        <ul class="post-list">
+          {posts.map((post) => (
+            <li class="post-item">
+              <a href={`/posts/${post.id}/`} class="post-link">
+                <div class="post-text">
+                  <h2>{post.data.title}</h2>
+                  <div class="post-meta">{fmt(post.data.pubDate)}</div>
+                  <p class="post-excerpt">{post.data.description}</p>
+                  <div class="tags">{post.data.tags.map((tag) => <span class="tag">{tag}</span>)}</div>
+                </div>
+                {post.data.cover && <img class="post-thumb" src={post.data.cover} alt="" loading="lazy" />}
+              </a>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="page-sub">{t.noPosts}</p>
+      )}
+    </main>
+
+    <aside class="col-side">
+      <div class="side-card">
+        <h3>{t.aboutCardTitle}</h3>
+        <p>{t.aboutCardText}</p>
+        <a href={`/${lang}/about/`} class="side-link">{t.moreAbout}</a>
+      </div>
+      <div class="side-card">
+        <h3>{t.topics}</h3>
+        <div class="tags">{allTags.map((tag) => <span class="tag">{tag}</span>)}</div>
+      </div>
+      <div class="side-card">
+        <h3>{t.loopTitle}</h3>
+        <p>{t.loopText}</p>
+        <p><a href={`/${lang}/subscribe/`} class="side-link">RSS →</a></p>
+      </div>
+    </aside>
+  </div>
+</BaseLayout>

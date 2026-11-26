@@ -1,0 +1,58 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import CookieConsent from '../components/CookieConsent.astro';
+import { getText, switchPath, type Lang } from '../i18n/helpers';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  type?: 'website' | 'article';
+  pubDate?: Date;
+  lang: Lang;
+  translationHref?: string;
+  translationLang?: string;
+}
+
+const { title, description, type = 'website', pubDate, lang, translationHref, translationLang } = Astro.props;
+const t = getText(lang);
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const fullTitle = title.includes(t.siteName) ? title : `${title} | ${t.siteName}`;
+
+// 导航栏语言切换目标：文章页用翻译稿，其余页面统一走 switchPath 推导
+// 根路径跳板页不匹配 /en/ 或 /zh/，因此不显示切换按钮
+let switchHref: string | undefined = translationHref;
+if (!switchHref) {
+  const derived = switchPath(Astro.url.pathname, lang, lang === 'zh' ? 'en' : 'zh');
+  if (derived !== Astro.url.pathname) switchHref = derived;
+}
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang={lang} href={canonical} />
+    {translationHref && <link rel="alternate" hreflang={translationLang} href={translationHref} />}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+    {pubDate && <meta property="article:published_time" content={pubDate.toISOString()} />}
+  </head>
+  <body>
+    <Header lang={lang} switchHref={switchHref} />
+    <div class="wrap">
+      <slot />
+    </div>
+    <Footer lang={lang} />
+    <CookieConsent lang={lang} />
+  </body>
+</html>

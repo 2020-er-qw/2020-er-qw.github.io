@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getText, isLang } from '../../i18n/helpers';
+import type { Lang } from '../../i18n/ui';
+
+export function getStaticPaths() {
+  return [{ params: { lang: 'en' } }, { params: { lang: 'zh' } }];
+}
+const { lang } = Astro.params;
+if (!isLang(lang)) return Astro.redirect('/');
+const L = lang as Lang;
+const t = getText(L);
+---
+
+<BaseLayout title={t.cookiesTitle} description={t.cookiesDesc} lang={L}>
+  <div class="reading">
+  <h1 class="page-title">{t.cookiesTitle}</h1>
+  <div class="legal">
+    <h2>{t.cookiesH2Essential}</h2>
+    <p>{t.cookiesPEssential}</p>
+    <h2>{t.cookiesH2Ads}</h2>
+    <p>{t.cookiesPAds}</p>
+    <p><a href="https://www.google.com/settings/ads" rel="noopener noreferrer">Google Ads Settings</a> · <a href="https://www.optoutofads.eu/" rel="noopener noreferrer">Your Online Choices</a></p>
+    <h2>{t.cookiesH2Withdraw}</h2>
+    <p>{t.cookiesPWithdraw}</p>
+    <h2>{t.cookiesH2Changes}</h2>
+    <p>{t.cookiesPChanges} <a href={`/${L}/privacy/`}>{t.privacyLink}</a>.</p>
+  </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { ui } from '../i18n/ui';
+const t = ui.en;
+---
+
+<BaseLayout title="404" description={t.notFoundSub} lang="en">
+  <div class="reading">
+    <h1 class="page-title">{t.notFoundTitle}</h1>
+    <p class="page-sub">{t.notFoundSub}</p>
+    <p><a href="/">{t.backToBlog}</a></p>
+  </div>
+</BaseLayout>
+<script is:inline>
+  (function () {
+    var lang = (navigator.language || 'en').toLowerCase();
+    var saved = null;
+    try { saved = localStorage.getItem('site-lang'); } catch (e) {}
+    if ((saved === 'zh') || (!saved && lang.indexOf('zh') === 0)) location.replace('/zh/404/');
+  })();
+</script>

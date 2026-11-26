@@ -1,0 +1,57 @@
+---
+import { getText, type Lang } from '../i18n/helpers';
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const t = getText(lang);
+const adsenseId = import.meta.env.PUBLIC_ADSENSE_ID ?? '';
+const [beforeLink, afterLink = ''] = t.cookieBannerText.split(t.cookiePolicyLink);
+---
+
+<div class="cookie-banner" id="cookie-banner" hidden data-adsense-id={adsenseId}>
+  <div class="wrap">
+    <p>
+      {beforeLink}<a href={`/${lang}/cookies/`}>{t.cookiePolicyLink}</a>{afterLink}
+    </p>
+    <div class="cookie-actions">
+      <button class="btn" id="cookie-reject" type="button">{t.cookieReject}</button>
+      <button class="btn btn-primary" id="cookie-accept" type="button">{t.cookieAccept}</button>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  (function () {
+    var KEY = 'cookie-consent-v1';
+    var banner = document.getElementById('cookie-banner');
+    var adsenseId = banner.getAttribute('data-adsense-id');
+
+    function loadAds() {
+      if (!adsenseId || adsenseId.indexOf('ca-pub-') !== 0) return;
+      if (document.querySelector('script[data-adsense]')) return;
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=' + adsenseId;
+      s.crossOrigin = 'anonymous';
+      s.setAttribute('data-adsense', '1');
+      document.head.appendChild(s);
+    }
+
+    var choice = null;
+    try { choice = localStorage.getItem(KEY); } catch (e) {}
+
+    if (choice === 'accepted') {
+      loadAds();
+    } else if (choice !== 'rejected') {
+      banner.hidden = false;
+    }
+
+    function decide(value) {
+      try { localStorage.setItem(KEY, value); } catch (e) {}
+      banner.hidden = true;
+      if (value === 'accepted') loadAds();
+    }
+
+    document.getElementById('cookie-accept').addEventListener('click', function () { decide('accepted'); });
+    document.getElementById('cookie-reject').addEventListener('click', function () { decide('rejected'); });
+  })();
+</script>

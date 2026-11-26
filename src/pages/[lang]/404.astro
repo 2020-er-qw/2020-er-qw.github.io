@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getText, isLang } from '../../i18n/helpers';
+import type { Lang } from '../../i18n/ui';
+
+export function getStaticPaths() {
+  return [{ params: { lang: 'en' } }, { params: { lang: 'zh' } }];
+}
+const { lang } = Astro.params;
+if (!isLang(lang)) return Astro.redirect('/');
+const L = lang as Lang;
+const t = getText(L);
+---
+
+<BaseLayout title="404" description={t.notFoundSub} lang={L}>
+  <div class="reading">
+  <h1 class="page-title">{t.notFoundTitle}</h1>
+  <p class="page-sub">{t.notFoundSub}</p>
+  <p><a href={`/${L}/`}>{t.backToBlog}</a></p>
+  </div>
+</BaseLayout>

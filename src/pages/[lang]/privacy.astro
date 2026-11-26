@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getText, isLang } from '../../i18n/helpers';
+import type { Lang } from '../../i18n/ui';
+
+export function getStaticPaths() {
+  return [{ params: { lang: 'en' } }, { params: { lang: 'zh' } }];
+}
+const { lang } = Astro.params;
+if (!isLang(lang)) return Astro.redirect('/');
+const L = lang as Lang;
+const t = getText(L);
+const updated = new Date().toLocaleDateString(L === 'zh' ? 'zh-CN' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+
+<BaseLayout title={t.privacyTitle} description={t.privacyDesc} lang={L}>
+  <div class="reading">
+  <h1 class="page-title">{t.privacyTitle}</h1>
+  <div class="legal">
+    <p><em>{t.lastUpdated}: {updated}</em></p>
+    <h2>{t.privacyH2Collect}</h2>
+    <p>{t.privacyPCollect}</p>
+    <h2>{t.privacyH2Ads}</h2>
+    <p>{t.privacyPAds}</p>
+    <h2>{t.privacyH2Analytics}</h2>
+    <p>{t.privacyPAnalytics}</p>
+    <h2>{t.privacyH2Rights}</h2>
+    <p>{t.privacyPRights}</p>
+    <h2>{t.privacyH2Contact}</h2>
+    <p>{t.privacyPContact}</p>
+  </div>
+  </div>
+</BaseLayout>
