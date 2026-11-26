@@ -43,13 +43,11 @@ collections:
         value: true
       - key: 'pinned'
         value: false
-      - key: 'pubDate'
-        value: '2026-11-26'
     fields:
       - { label: '标题 Title', name: 'title', widget: 'string', required: true }
       - { label: '摘要 Description', name: 'description', widget: 'text', required: true }
-      - { label: '发布日期 Pub date', name: 'pubDate', widget: 'date', format: 'YYYY-MM-DD', required: true }
-      - { label: '更新时间 Updated date（可选）', name: 'updatedDate', widget: 'date', format: 'YYYY-MM-DD', required: false }
+      - { label: '发布日期 Pub date', name: 'pubDate', widget: 'datetime', type: date, format: 'YYYY-MM-DD', default: '{{now}}', required: true }
+      - { label: '更新时间 Updated date（可选）', name: 'updatedDate', widget: 'datetime', type: date, format: 'YYYY-MM-DD', required: false }
       - { label: '封面图 Cover', name: 'cover', widget: 'image', required: false,
           hint: '建议 16:9 横图，上传后自动存到 public/covers' }
       - { label: '语言 Language', name: 'lang', widget: 'select', options: ['en', 'zh'], default: 'en',
