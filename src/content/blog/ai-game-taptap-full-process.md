@@ -1,7 +1,7 @@
 ---
 title: "I Made a Game with AI and Shipped It to TapTap: The Full Process"
 description: "From picking a genre to a live store page: building a color-sorting puzzle as a single HTML file, generating every store asset with scripts, and the traps TapTap review set for me."
-pubDate: 2026-11-26
+pubDate: 2026-11-26 15:00
 tags: ["AI", "game dev", "indie"]
 cover: /covers/taptap-game.webp
 ---

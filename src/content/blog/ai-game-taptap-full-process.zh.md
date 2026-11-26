@@ -1,7 +1,7 @@
 ---
 title: "我用 AI 做了个游戏，从写代码到上架 TapTap 全程实录"
 description: "从选赛道到商店页上线：单 HTML 文件做出排序消除游戏，全部商店素材靠脚本生成，以及 TapTap 审核给我埋的三个坑。"
-pubDate: 2026-11-26
+pubDate: 2026-11-26 15:00
 tags: ["AI", "游戏开发", "独立开发"]
 cover: /covers/taptap-game.webp
 ---

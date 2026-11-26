@@ -11,7 +11,8 @@ const isZh = lang === 'zh';
 // 语言由文件名后缀决定：<名称>.md = 英文，<名称>.zh.md = 中文
 const langPosts = (await getCollection('blog', ({ data }) => !data.draft))
   .filter((p) => parsePostId(p.id).lang === lang)
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+  // 时间降序；同一毫秒时按 id 字母序兜底，保证顺序确定
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf() || (a.id < b.id ? -1 : 1));
 const pinned = langPosts.find((p) => p.data.pinned);
 const posts = langPosts.filter((p) => p.id !== pinned?.id);
 const allTags = [...new Set(langPosts.flatMap((p) => p.data.tags))];

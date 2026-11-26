@@ -13,7 +13,8 @@ const blog = defineCollection({
     title: z.string(),
     description: z.string(),
     pubDate: z.coerce.date(),
-    updatedDate: z.coerce.date().optional(),
+    // 后台留空时 Sveltia 会存空字符串 ''，必须转成 undefined，否则 Invalid Date 炸构建
+    updatedDate: z.preprocess((v) => (v === '' || v == null ? undefined : v), z.coerce.date().optional()),
     tags: z.array(z.string()).default([]),
     draft: z.boolean().default(false),
     // 封面图路径（相对 public/，如 /covers/xxx.png）；置顶文章在列表顶部固定展示

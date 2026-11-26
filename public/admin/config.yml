@@ -61,8 +61,9 @@ collections:
       - { label: '标题 Title', name: 'title', widget: 'string', required: true, i18n: true }
       - { label: '摘要 Description', name: 'description', widget: 'text', required: true, i18n: true }
       # —— 两种语言共享，只填一次 ——
-      - { label: '发布日期 Pub date', name: 'pubDate', widget: 'datetime', type: date, format: 'YYYY-MM-DD', default: '{{now}}', required: true, i18n: duplicate }
-      - { label: '更新时间 Updated date（可选）', name: 'updatedDate', widget: 'datetime', type: date, format: 'YYYY-MM-DD', required: false, i18n: duplicate }
+      - { label: '发布日期 Pub date', name: 'pubDate', widget: 'datetime', date_format: 'YYYY-MM-DD', time_format: 'HH:mm', format: 'YYYY-MM-DD HH:mm', default: '{{now}}', required: true, i18n: duplicate,
+          hint: '默认当前时间。同一天发多篇文章时，靠这个时间决定谁排在前面' }
+      - { label: '更新时间 Updated date（可选）', name: 'updatedDate', widget: 'datetime', date_format: 'YYYY-MM-DD', time_format: 'HH:mm', format: 'YYYY-MM-DD HH:mm', required: false, i18n: duplicate }
       - { label: '封面图 Cover', name: 'cover', widget: 'image', required: false, i18n: duplicate,
           hint: '建议 16:9 横图，上传后自动存到 public/covers；中英两版共用这张图' }
       - { label: '置顶 Pinned', name: 'pinned', widget: 'boolean', default: false, i18n: duplicate,

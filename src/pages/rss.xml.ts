@@ -7,7 +7,7 @@ export async function GET(context: APIContext) {
   // RSS 只输出英文版（订阅主流），链接走统一规则 /posts/<base>/
   const posts = (await getCollection('blog', ({ data }) => !data.draft))
     .filter((p) => parsePostId(p.id).lang === 'en')
-    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf() || (a.id < b.id ? -1 : 1));
 
   return rss({
     title: 'AI Field Notes',
