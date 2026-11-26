@@ -3,8 +3,6 @@ title: "欢迎来到 AI Field Notes：这个站是做什么的（以及不做什
 description: "用一篇短文说清楚：为什么有这个站、写给谁看，以及每篇文章都遵守的那一条规矩——来自日常使用，不是来自新闻稿。"
 pubDate: 2026-11-26
 tags: ["AI", "关于本站"]
-lang: zh
-translation: welcome-to-ai-field-notes
 cover: /covers/welcome.webp
 pinned: true
 ---

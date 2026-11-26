@@ -3,8 +3,6 @@ title: "Welcome to AI Field Notes: What This Site Is (and Isn't)"
 description: "A short note on why this site exists, who it's for, and the one rule every article here follows — written from daily use, not from a press release."
 pubDate: 2026-11-26
 tags: ["AI", "about"]
-lang: en
-translation: welcome-to-ai-field-notes-zh
 cover: /covers/welcome.webp
 pinned: true
 ---

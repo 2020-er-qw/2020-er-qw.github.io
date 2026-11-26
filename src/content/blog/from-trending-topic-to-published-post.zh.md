@@ -3,8 +3,6 @@ title: "从热点到发布：我这套 AI 内容流水线，哪些交给机器�
 description: "真实拆解我的 AI 内容流水线：哪些步骤交给机器、哪些我绝不自动化，以及浏览器自动化让我损失一整个上午的那次事故。"
 pubDate: 2026-11-26
 tags: ["AI", "自动化", "内容创作"]
-lang: zh
-translation: from-trending-topic-to-published-post
 cover: /covers/ai-content-pipeline.webp
 ---
 

@@ -3,8 +3,6 @@ title: "From Trending Topic to Published Post: My AI Content Pipeline"
 description: "A real look at the AI content pipeline I use to go from a trending topic to a published post — which steps I automate, which ones I refuse to, and the browser automation traps that cost me a morning."
 pubDate: 2026-11-26
 tags: ["AI", "automation", "content"]
-lang: en
-translation: from-trending-topic-to-published-post-zh
 cover: /covers/ai-content-pipeline.webp
 ---
 

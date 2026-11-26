@@ -44,22 +44,20 @@ scripts/             工作文件
 
 1. 打开 `https://你的域名/admin/`，点 **Sign In Using Access Token**，粘贴 GitHub 令牌（令牌生成见第五节第 4 步）。令牌会记在该浏览器里，之后不用重复粘贴。
 2. 左侧 **Posts** → **New Post**。
-3. 填字段：
-   - **Title / Description**：标题和摘要
-   - **Pub date**：发布日期
-   - **Cover**：上传封面图（自动存到 `public/covers`）
-   - **Language**：`en` 英文 / `zh` 中文——**做双语要分别建两篇**
-   - **Translation**：另一语言版本的 slug（如 `welcome-to-ai-field-notes-zh`），没有就留空
-   - **Pinned**：置顶（同一语言只开一篇）
-   - **Draft**：**发布前一定要关掉**，否则网站上看不到
-   - **Tags / Body**：标签和正文
-4. 点 **Publish**。Sveltia 自动 commit 到 GitHub → GitHub Actions 触发构建 → 一两分钟后文章上线。
+3. 编辑页顶部有 **English / 中文 标签页**——一个条目就是一篇文章的中英两版：
+   - **共享字段（只填一次）**：Pub date（默认当天）、Cover（自动存 `public/covers`，中英共用）、Pinned、Draft、Tags
+   - **按语言填写**：Title / Description / Body，在标签页之间切换分别输入
+   - **Draft：发布前一定要关掉**，否则网站上看不到
+4. 点 **Publish**。Sveltia 一次提交中英两个文件 → GitHub Actions 触发构建 → 一两分钟后两版同时上线。
+5. 只想发单语言？点编辑页右上角三个点菜单，把不需要的语言关掉即可。
 
-> 中英双语做法：写一篇英文的，记下 slug；再建中文篇，Language 选 `zh`，Translation 填英文 slug；英文篇的 Translation 回填中文 slug。两篇自动互链 + hreflang。
+> 中英互链是自动的：同一篇文章的中英版本按文件名配对（`文章.md` / `文章.zh.md`），页面顶部自动出现"阅读中文版 / Read in English"，Google 识别 hreflang 也不需要任何手动配置。
+>
+> 还能更省事：后台设置里可以接入 DeepSeek / OpenAI 等 API key，**一键把整个条目翻译成另一种语言**，再人工校对后发布。
 
 ### 方式 B：手动写 Markdown（本地开发时用）
 
-在 `src/content/blog/` 新建 `.md`：
+在 `src/content/blog/` 新建 `.md`。**语言由文件名决定**：英文 `文章名.md`，中文 `文章名.zh.md`（同一篇文章两种语言用同一个"文章名"）：
 
 ```markdown
 ---
@@ -67,8 +65,6 @@ title: "Your title here"
 description: "One-sentence summary, shown in search results and social cards."
 pubDate: 2026-11-26
 tags: ["AI", "automation"]
-lang: en
-translation: your-post-slug-zh
 cover: /covers/your-image.webp
 pinned: false
 draft: false

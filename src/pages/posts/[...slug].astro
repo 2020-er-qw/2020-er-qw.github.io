@@ -1,30 +1,28 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getText, type Lang } from '../../i18n/helpers';
+import { getText, parsePostId, type Lang } from '../../i18n/helpers';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
-  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+  return posts.map((post) => {
+    const info = parsePostId(post.id);
+    // 互译稿：同名文件的另一种语言版本（已发布才生成切换链接）
+    const siblingId = info.lang === 'en' ? info.zhId : info.enId;
+    const sibling = posts.find((p) => p.id === siblingId);
+    return {
+      params: { slug: info.base + (info.lang === 'zh' ? '-zh' : '') },
+      props: { post, translationHref: sibling ? parsePostId(sibling.id).href : undefined },
+    };
+  });
 }
 
-const { post } = Astro.props;
+const { post, translationHref } = Astro.props;
 const { Content } = await render(post);
-const lang: Lang = post.data.lang === 'zh' ? 'zh' : 'en';
+const lang: Lang = parsePostId(post.id).lang;
 const t = getText(lang);
 const isZh = lang === 'zh';
 const fmt = (d) => d.toLocaleDateString(isZh ? 'zh-CN' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
-
-let translationHref;
-let translationLang;
-if (post.data.translation) {
-  const all = await getCollection('blog', ({ data }) => !data.draft);
-  const other = all.find((p) => p.id === post.data.translation);
-  if (other) {
-    translationHref = `/posts/${other.id}/`;
-    translationLang = other.data.lang === 'zh' ? 'zh' : 'en';
-  }
-}
 ---
 
 <BaseLayout
@@ -34,7 +32,7 @@ if (post.data.translation) {
   pubDate={post.data.pubDate}
   lang={lang}
   translationHref={translationHref}
-  translationLang={translationLang}
+  translationLang={isZh ? 'en' : 'zh'}
 >
   <div class="reading">
   <article>

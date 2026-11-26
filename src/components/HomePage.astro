@@ -1,18 +1,20 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getText, type Lang } from '../i18n/helpers';
+import { getText, parsePostId, type Lang } from '../i18n/helpers';
 
 interface Props { lang: Lang; }
 const { lang } = Astro.props;
 const t = getText(lang);
 const isZh = lang === 'zh';
 
-const allPosts = (await getCollection('blog', ({ data }) => !data.draft && (data.lang || 'en') === lang))
+// 语言由文件名后缀决定：<名称>.md = 英文，<名称>.zh.md = 中文
+const langPosts = (await getCollection('blog', ({ data }) => !data.draft))
+  .filter((p) => parsePostId(p.id).lang === lang)
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-const pinned = allPosts.find((p) => p.data.pinned);
-const posts = allPosts.filter((p) => p.id !== pinned?.id);
-const allTags = [...new Set(allPosts.flatMap((p) => p.data.tags))];
+const pinned = langPosts.find((p) => p.data.pinned);
+const posts = langPosts.filter((p) => p.id !== pinned?.id);
+const allTags = [...new Set(langPosts.flatMap((p) => p.data.tags))];
 const fmt = (d) => d.toLocaleDateString(isZh ? 'zh-CN' : 'en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
 ---
 
@@ -25,7 +27,7 @@ const fmt = (d) => d.toLocaleDateString(isZh ? 'zh-CN' : 'en-GB', { day: 'numeri
   <div class="layout-two-col">
     <main class="col-main">
       {pinned && (
-        <a href={`/posts/${pinned.id}/`} class="pinned-card">
+        <a href={parsePostId(pinned.id).href} class="pinned-card">
           {pinned.data.cover && <img class="pinned-cover" src={pinned.data.cover} alt="" loading="eager" />}
           <div class="pinned-body">
             <span class="pinned-badge">📌 {t.pinnedLabel}</span>
@@ -41,7 +43,7 @@ const fmt = (d) => d.toLocaleDateString(isZh ? 'zh-CN' : 'en-GB', { day: 'numeri
         <ul class="post-list">
           {posts.map((post) => (
             <li class="post-item">
-              <a href={`/posts/${post.id}/`} class="post-link">
+              <a href={parsePostId(post.id).href} class="post-link">
                 <div class="post-text">
                   <h2>{post.data.title}</h2>
                   <div class="post-meta">{fmt(post.data.pubDate)}</div>
