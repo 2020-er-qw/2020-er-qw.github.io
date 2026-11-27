@@ -1,5 +1,5 @@
 ---
-title: I Built a Weibo Auto-Transfer System with AI: 25 Files, One Week of Real Use
+title: 'I Built a Weibo Auto-Transfer System with AI: 25 Files, One Week of Real Use'
 description: From "manually copying drive links from Weibo every day" to a local automated pipeline — I had AI generate a 9,357-line system in one sentence. Here's the full process, real running data, and the pitfalls.
 pubDate: 2026-11-27 10:00
 tags: [AI Workflow, Automation, Productivity]
